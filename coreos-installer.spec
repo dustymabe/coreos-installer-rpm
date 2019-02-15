@@ -1,11 +1,6 @@
 %global dracutlibdir    %{_prefix}/lib/dracut
-%global provider        github
-%global provider_tld    com
-%global project         coreos
-%global repo            coreos-installer
+
 # https://github.com/coreos/coreos-installer
-%global provider_prefix %{provider}.%{provider_tld}/%{project}/%{repo}
-%global import_path     %{provider_prefix}
 %global commit          081d4bed42489a48e95f559022d96f4999e56cbd
 %global shortcommit     %(c=%{commit}; echo ${c:0:7})
 
@@ -14,9 +9,8 @@ Version:   0
 Release:   1.git%{shortcommit}%{?dist}
 Summary:   Installer for CoreOS style systems
 License:   GPLv3
-URL:       https://%{provider_prefix}
-Source0:   https://%{provider_prefix}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
-
+URL:       https://github.com/coreos/%{name}
+Source0:   %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 BuildArch: noarch
 
 
@@ -43,9 +37,7 @@ This package contains the coreos-installer script used to install CoreOS
 disk images to bare metal machines.
 
 %prep
-# setup command reference: http://ftp.rpm.org/max-rpm/s1-rpm-inside-macros.html
-# unpack source0 and apply patches
-%setup -T -b 0 -q -n %{repo}-%{commit}
+%autosetup -n %{name}-%{commit} -p1
 
 %build
 
@@ -69,10 +61,8 @@ cp -r dracut/* %{buildroot}/%{dracutlibdir}/modules.d/
 Summary:   Dracut modules for CoreOS Installer
 License:   GPLv3
 Requires:  %{name} = %{version}-%{release}
-Requires:  coreos-installer
 Requires:  dracut
 Requires:  dracut-network
-BuildArch: noarch
 
 %description dracut
 Dracut module that enables the CoreOS installer to run in the
