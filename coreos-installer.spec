@@ -2,12 +2,11 @@
 %global provider        github
 %global provider_tld    com
 %global project         coreos
-%global project         dustymabe
 %global repo            coreos-installer
 # https://github.com/coreos/coreos-installer
 %global provider_prefix %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path     %{provider_prefix}
-%global commit          a32b8e28f945602d0a6e784e9ba319b225ee9ee2
+%global commit          081d4bed42489a48e95f559022d96f4999e56cbd
 %global shortcommit     %(c=%{commit}; echo ${c:0:7})
 
 Name:      coreos-installer
@@ -40,9 +39,8 @@ Requires:  /usr/bin/zcat
 
 
 %description
-This package contains differentiated branding and configuration for Fedora
-Atomic for use in a product.img file for Anaconda, the Fedora installer. It
-is not useful on an installed system.
+This package contains the coreos-installer script used to install CoreOS 
+disk images to bare metal machines.
 
 %prep
 # setup command reference: http://ftp.rpm.org/max-rpm/s1-rpm-inside-macros.html
@@ -54,7 +52,7 @@ is not useful on an installed system.
 %install
 # main package
 install -d -p %{buildroot}%{_libexecdir}
-install -p -m 0754 ./coreos-installer %{buildroot}%{_libexecdir}
+install -p -m 0755 ./coreos-installer %{buildroot}%{_libexecdir}
 # dracut subpackage
 install -d -p %{buildroot}/%{dracutlibdir}/modules.d
 cp -r dracut/* %{buildroot}/%{dracutlibdir}/modules.d/
@@ -77,7 +75,7 @@ Requires:  dracut-network
 BuildArch: noarch
 
 %description dracut
-Dracut module that enables the CoreOS Installer to run in the
+Dracut module that enables the CoreOS installer to run in the
 initramfs on boot.
 
 %files dracut
@@ -87,5 +85,5 @@ initramfs on boot.
 ############## end dracut subpackage ##############
 
 %changelog
-* Thu Feb 14 2019 Dusty Mabe <dusty@dustymabe.com> - 0-1
+* Thu Feb 14 2019 Dusty Mabe <dusty@dustymabe.com> - 0-1.git081d4be
 - Initial Commit
